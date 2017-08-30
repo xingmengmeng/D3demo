@@ -147,7 +147,8 @@
     export default {
         data(){
             return{
-
+                chartWidth:900,
+                chartHeight:400,
             }
         },
         mounted(){
@@ -160,6 +161,8 @@
                     aChart=document.querySelector('#chartId');
                 //头部 50  头下方title 52  图的title30  中间间隔30
                 aChart.style.height=winHeight-50-52-30-30+'px';
+                this.chartHeight=winHeight-50-52-30-30;
+                this.chartWidth=aChart.clientWidth;
             },
             drawChart(){
                 console.dir(d3);
@@ -175,8 +178,8 @@
                 let nodes=graph.nodes,
                     links=graph.links;
 
-                const w = 960,//后期改为整块区域的宽高，待修改
-                      h = 500;
+                const w = this.chartWidth,//后期改为整块区域的宽高，待修改
+                      h = this.chartHeight;
                 let chartDiv=d3.select('body').select('#chartId');
                 let svg=chartDiv.append("svg")
                     .attr("width", w)
@@ -210,7 +213,10 @@
                         }
 						return '#ccccff'
 					})
-                    .call(d3.drag())
+                    .call(d3.drag()
+                        .on("start",dragstarted)
+                        .on("drag",dragged)
+                        .on("end",dragended))
                     .on('click',nodeClick);
                 //节点上的文字
                 var svg_texts = svg.selectAll("text")
