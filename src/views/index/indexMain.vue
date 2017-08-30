@@ -164,9 +164,9 @@
                           { name: "XiAn"    }, { name: "HangZhou"   },
                           { name: "ShangHai"   }, { name: "QingDao"    },
                           { name: "NanJing"    } ],
-                    "links": [  { source : 0  , target: 1 ,type:'联系人'} , { source : 0  , target: 2 ,type:'cc'} ,
-                           { source : 0  , target: 3,type:'ww' } , { source : 1  , target: 4 ,type:'cc'} ,
-                           { source : 1  , target: 5,type:'vv' } , { source : 1  , target: 6 ,type:'22'}  ]
+                    "links": [  { source : 0  , target: 6 ,type:'联系人'} , { source : 0  , target: 4 ,type:'cc'} ,
+                           { source : 2  , target: 3,type:'ww' } , { source : 1  , target: 4 ,type:'cc'} ,
+                           { source : 1  , target: 5,type:'vv' } , { source : 3  , target: 6 ,type:'22'}  ]
                 }
                 let nodes=graph.nodes,
                     links=graph.links;
