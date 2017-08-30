@@ -74,14 +74,18 @@
 </template>
 <style>
     .link {
-        stroke: #000;
-        stroke-width: 1.5px;
+        stroke: #0099cc;
+        stroke-width: 1px;
     }
     .node {
         cursor: move;
         fill: #ccc;
         stroke: #000;
         stroke-width: 1.5px;
+    }
+    circle {
+        stroke: #c8c8c8;
+        stroke-width: 1px;
     }
 </style>
 
@@ -155,22 +159,18 @@
             },
             drawChart(){
                 console.dir(d3);
-                var links = [
-                    {id:1,source: "Microsoft", target: "Amazon", type: "licensing"},
-                    {id:2,source: "Microsoft", target: "HTC", type: "licensing"},
-                    {id:3,source: "Samsung", target: "Apple", type: "suit"},
-                    {id:4,source: "Motorola", target: "Apple", type: "suit"},
-                    {id:5,source: "Nokia", target: "Apple", type: "resolved"},
-                    {id:6,source: "HTC", target: "Apple", type: "suit"},
-                ];
-                var nodeObj = {},nodes=[];
-                links.forEach(function(link) {
-                    link.source = nodeObj[link.source] || (nodeObj[link.source] = {name: link.source,id:link.id,type:link.type});
-                    link.target = nodeObj[link.target] || (nodeObj[link.target] = {name: link.target,id:link.id,type:link.type});
-                });
-                for(let key in nodeObj){
-                    nodes.push(nodeObj[key])
+                var graph ={
+                    "nodes": [ { name: "BeiJing",type:"person"   }, { name: "XiaMen",type:'suit' },
+                          { name: "XiAn"    }, { name: "HangZhou"   },
+                          { name: "ShangHai"   }, { name: "QingDao"    },
+                          { name: "NanJing"    } ],
+                    "links": [  { source : 0  , target: 1 ,type:'联系人'} , { source : 0  , target: 2 ,type:'cc'} ,
+                           { source : 0  , target: 3,type:'ww' } , { source : 1  , target: 4 ,type:'cc'} ,
+                           { source : 1  , target: 5,type:'vv' } , { source : 1  , target: 6 ,type:'22'}  ]
                 }
+                let nodes=graph.nodes,
+                    links=graph.links;
+
                 const w = 960,//后期改为整块区域的宽高，待修改
                       h = 500;
                 let chartDiv=d3.select('body').select('#chartId');
@@ -181,23 +181,50 @@
                 var node = svg.selectAll(".node");
                 //引入力导向图
                 let force = d3.forceSimulation()
-                    .force("charge",d3.forceManyBody())
+                    .force("charge",d3.forceManyBody().strength(-400))
                     .force("center",d3.forceCenter(w/2,h/2))
                     .on("tick",tick)
                     .nodes(nodes)
-                    .force("link",d3.forceLink(links).distance(200));//连接线长度
+                    .force("link",d3.forceLink(links).distance(300).strength(2));//forceLink连接力 distance连接线长度 strength连接强度
                 
                 link=link.data(links)
                     .enter().append("line")
-                    .attr("class", "link");
+                    .attr("class", "link")
+                    .on('click',function(d){
+                        console.log(d.type)
+                    });
                 node = node.data(nodes)
                     .enter().append("circle")
-                    .attr("class", "node")
-                    .attr("r", 12)
-                    // .on("dblclick", dblclick)
-                    .call(d3.drag());
+                    .attr("r", function(d){
+                        if(d.type=='person'){//根据type判断圈的大小
+                            return 30;
+                        }else{
+                            return 20;
+                        }
+                    })
+                    .style("fill",function(d,i){
+                        if(d.type=='suit'){
+                            return '#f1bebe'
+                        }
+						return '#ccccff'
+					})
+                    .call(d3.drag())
+                    .on('click',nodeClick);
 
-                console.log(svg);
+                var svg_texts = svg.selectAll("text")
+                    .data(nodes)
+                    .enter()
+                    .append("text")
+                    .style("fill", "black")
+                    .attr("x", -20)
+                    .attr("y", -20)
+                    .text(function(d){
+                        return d.name;
+                    });
+
+                function nodeClick(d){
+                    console.log(d.name);
+                }
                 function tick() {
                     link.attr("x1", function(d) { return d.source.x; })
                         .attr("y1", function(d) { return d.source.y; })
@@ -206,7 +233,26 @@
 
                     node.attr("cx", function(d) { d.fx=d.x;return d.x; })
                         .attr("cy", function(d) { d.fy=d.y;return d.y; });
+
+                    svg_texts.attr("x", function(d){ return d.x-10; })
+                        .attr("y", function(d){ return d.y+5; });
                     }
+                function dragstarted(d) {
+                    if (!d3.event.active) force.alphaTarget(0.3).restart();  //restart是重新恢复模拟
+                    d.fx = d.x;    //d.x是当前位置，d.fx是固定位置
+                    d.fy = d.y;
+                }
+
+                function dragged(d) {
+                    d.fx = d3.event.x;
+                    d.fy = d3.event.y;
+                }
+
+                function dragended(d) {
+                    if (!d3.event.active) force.alphaTarget(0);
+                    d.fx = null;       //解除dragged中固定的坐标
+                    d.fy = null;
+                }
             }
         }
     }
