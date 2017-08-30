@@ -87,6 +87,10 @@
         stroke: #c8c8c8;
         stroke-width: 1px;
     }
+    .linetext{
+        background: #fff;
+        cursor: pointer;
+    }
 </style>
 
 <style lang="less" scoped>
@@ -189,10 +193,7 @@
                 
                 link=link.data(links)
                     .enter().append("line")
-                    .attr("class", "link")
-                    .on('click',function(d){
-                        console.log(d.type)
-                    });
+                    .attr("class", "link");
                 node = node.data(nodes)
                     .enter().append("circle")
                     .attr("r", function(d){
@@ -221,6 +222,18 @@
                     .text(function(d){
                         return d.name;
                     });
+                
+                var line_texts=svg.selectAll(".linetext")  
+                    .data(links)  
+                    .enter()  
+                    .append("text")  
+                    .attr("class","linetext")  
+                    .text(function(d){  
+                        return d.type;  
+                    })
+                    .on('click',function(d){
+                        console.log(d.type)
+                    }); 
 
                 function nodeClick(d){
                     console.log(d.name);
@@ -236,7 +249,10 @@
 
                     svg_texts.attr("x", function(d){ return d.x-10; })
                         .attr("y", function(d){ return d.y+5; });
-                    }
+                    
+                    line_texts.attr("x",function(d){ return (d.source.x + d.target.x) / 2 ; })
+                        .attr("y",function(d){ return (d.source.y + d.target.y) / 2 ; }); 
+                }
                 function dragstarted(d) {
                     if (!d3.event.active) force.alphaTarget(0.3).restart();  //restart是重新恢复模拟
                     d.fx = d.x;    //d.x是当前位置，d.fx是固定位置
