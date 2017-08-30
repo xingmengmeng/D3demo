@@ -194,6 +194,7 @@
                 link=link.data(links)
                     .enter().append("line")
                     .attr("class", "link");
+                //节点
                 node = node.data(nodes)
                     .enter().append("circle")
                     .attr("r", function(d){
@@ -211,7 +212,7 @@
 					})
                     .call(d3.drag())
                     .on('click',nodeClick);
-
+                //节点上的文字
                 var svg_texts = svg.selectAll("text")
                     .data(nodes)
                     .enter()
@@ -222,7 +223,7 @@
                     .text(function(d){
                         return d.name;
                     });
-                
+                //线上的文字
                 var line_texts=svg.selectAll(".linetext")  
                     .data(links)  
                     .enter()  
