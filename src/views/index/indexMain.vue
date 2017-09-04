@@ -312,9 +312,6 @@
                     d.fy = null;
                 }
             },
-            nodeClick(){
-                console.log(1)
-            }
         }
     }
 </script>
