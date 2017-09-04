@@ -149,11 +149,12 @@
             return{
                 chartWidth:900,
                 chartHeight:400,
+                graph:null,
             }
         },
         mounted(){
             this.getChartHeight();
-            this.drawChart();//画图
+            this.getData();
         },
         methods:{
             getChartHeight(){
@@ -164,9 +165,16 @@
                 this.chartHeight=winHeight-50-52-30-30;
                 this.chartWidth=aChart.clientWidth;
             },
+            getData(){
+                this.$http.get('/graph/data.gm').then(function(res){
+                    this.graph=res.data.data;
+                    this.drawChart();//画图
+                })
+            },
             drawChart(){
                 console.dir(d3);
-                var graph ={
+                
+                /*var graph ={
                     "nodes": [ { name: "BeiJing",type:"person"   }, { name: "XiaMen",type:'suit' },
                           { name: "XiAn"    }, { name: "HangZhou"   },
                           { name: "ShangHai"   }, { name: "QingDao"    },
@@ -174,9 +182,9 @@
                     "links": [  { source : 0  , target: 6 ,type:'联系人'} , { source : 0  , target: 4 ,type:'cc'} ,
                            { source : 2  , target: 3,type:'ww' } , { source : 1  , target: 4 ,type:'cc'} ,
                            { source : 1  , target: 5,type:'vv' } , { source : 3  , target: 6 ,type:'22'}  ]
-                }
-                let nodes=graph.nodes,
-                    links=graph.links;
+                }*/
+                let nodes=this.graph.nodes,
+                    links=this.graph.links;
 
                 const w = this.chartWidth,//后期改为整块区域的宽高，待修改
                       h = this.chartHeight;
