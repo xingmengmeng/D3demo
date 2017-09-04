@@ -270,17 +270,17 @@
                     //更新节点坐标  限制节点位置
                     node.attr("cx",function(d){ 
                             if( d.x < 0 ){
-                                d.x = 0;
+                                d.x = 0+50;
                             }else if( d.x > w ){
-                                d.x = w;
+                                d.x = w-50;
                             }  
                             return d.x; 
                         })
                         .attr("cy",function(d){ 
                             if( d.y < 0 ){
-                                d.y = 0;
+                                d.y = 0+50;
                             }else if( d.y > h ){
-                                d.y = h;
+                                d.y = h-50;
                             }
                             return d.y; 
                         });
