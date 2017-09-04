@@ -78,7 +78,7 @@
         stroke-width: 1px;
     }
     .node {
-        cursor: move;
+        cursor: pointer;
         fill: #ccc;
         stroke: #000;
         stroke-width: 1.5px;
@@ -86,9 +86,13 @@
     circle {
         stroke: #c8c8c8;
         stroke-width: 1px;
+        cursor: pointer;
     }
     .linetext{
         background: #fff;
+        cursor: pointer;
+    }
+    text{
         cursor: pointer;
     }
 </style>
@@ -200,7 +204,7 @@
                     .force("center",d3.forceCenter(w/2,h/2))
                     .on("tick",tick)
                     .nodes(nodes)
-                    .force("link",d3.forceLink(links).distance(300).strength(2));//forceLink连接力 distance连接线长度 strength连接强度
+                    .force("link",d3.forceLink(links).distance(200)/*.strength(2)*/);//forceLink连接力 distance连接线长度 strength连接强度
                 
                 link=link.data(links)
                     .enter().append("line")
@@ -216,7 +220,7 @@
                         }
                     })
                     .style("fill",function(d,i){
-                        if(d.type=='suit'){
+                        if(d.type=='1'){
                             return '#f1bebe'
                         }
 						return '#ccccff'
@@ -236,7 +240,11 @@
                     .attr("y", -20)
                     .text(function(d){
                         return d.name;
-                    });
+                    })
+                    .call(d3.drag()
+                        .on("start",dragstarted)
+                        .on("drag",dragged)
+                        .on("end",dragended));
                 //线上的文字
                 var line_texts=svg.selectAll(".linetext")  
                     .data(links)  
@@ -258,13 +266,32 @@
                         .attr("y1", function(d) { return d.source.y; })
                         .attr("x2", function(d) { return d.target.x; })
                         .attr("y2", function(d) { return d.target.y; });
+                    
+                    //更新节点坐标  限制节点位置
+                    node.attr("cx",function(d){ 
+                            if( d.x < 0 ){
+                                d.x = 0;
+                            }else if( d.x > w ){
+                                d.x = w;
+                            }  
+                            return d.x; 
+                        })
+                        .attr("cy",function(d){ 
+                            if( d.y < 0 ){
+                                d.y = 0;
+                            }else if( d.y > h ){
+                                d.y = h;
+                            }
+                            return d.y; 
+                        });
 
-                    node.attr("cx", function(d) { d.fx=d.x;return d.x; })
-                        .attr("cy", function(d) { d.fy=d.y;return d.y; });
-
+                    //更新文字坐标
                     svg_texts.attr("x", function(d){ return d.x-10; })
                         .attr("y", function(d){ return d.y+5; });
-                    
+
+                    /*node.attr("cx", function(d) { d.fx=d.x;return d.x; })
+                        .attr("cy", function(d) { d.fy=d.y;return d.y; });*/
+
                     line_texts.attr("x",function(d){ return (d.source.x + d.target.x) / 2 ; })
                         .attr("y",function(d){ return (d.source.y + d.target.y) / 2 ; }); 
                 }
@@ -284,6 +311,9 @@
                     d.fx = null;       //解除dragged中固定的坐标
                     d.fy = null;
                 }
+            },
+            nodeClick(){
+                console.log(1)
             }
         }
     }
