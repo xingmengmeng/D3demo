@@ -207,7 +207,9 @@
                     .force("link",d3.forceLink(links).distance(200)/*.strength(2)*/);//forceLink连接力 distance连接线长度 strength连接强度
                 
                 link=link.data(links)
-                    .enter().append("line")
+                    .enter().append("path")
+                    .attr('d',function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y})
+                    .attr('id',function(d,i){return 'path'+i;})
                     .attr("class", "link");
                 //节点
                 node = node.data(nodes)
@@ -229,7 +231,7 @@
                         .on("start",dragstarted)
                         .on("drag",dragged)
                         .on("end",dragended))
-                    .on('click',nodeClick);
+                    .on('click',nodeClick);                                                                                                  
                 //节点上的文字
                 var svg_texts = svg.selectAll("text")
                     .data(nodes)
@@ -251,6 +253,12 @@
                     .enter()  
                     .append("text")  
                     .attr("class","linetext")  
+                    .append('textPath').attr(
+                        'xlink:href',function(d,i){
+                            return '#path'+i;
+                        }
+                    )
+                    .attr('startOffset','20%')
                     .text(function(d){  
                         return d.type;  
                     })
@@ -262,10 +270,14 @@
                     console.log(d.name);
                 }
                 function tick() {
-                    link.attr("x1", function(d) { return d.source.x; })
+                    /*link.attr("x1", function(d) { return d.source.x; })
                         .attr("y1", function(d) { return d.source.y; })
                         .attr("x2", function(d) { return d.target.x; })
-                        .attr("y2", function(d) { return d.target.y; });
+                        .attr("y2", function(d) { return d.target.y; });*/
+                    link.attr('d', function(d) { 
+                        var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;
+                        return path;
+                    });  
                     
                     //更新节点坐标  限制节点位置
                     node.attr("cx",function(d){ 
