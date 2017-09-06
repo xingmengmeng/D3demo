@@ -92,9 +92,6 @@
         background: #fff;
         cursor: pointer;
     }
-    text{
-        cursor: pointer;
-    }
 </style>
 
 <style lang="less" scoped>
@@ -258,7 +255,7 @@
                             return '#path'+i;
                         }
                     )
-                    .attr('startOffset','20%')
+                    .attr('startOffset','15%')
                     .text(function(d){  
                         return d.type;  
                     })
