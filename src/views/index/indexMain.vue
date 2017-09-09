@@ -194,6 +194,22 @@
                 let svg=chartDiv.append("svg")
                     .attr("width", w)
                     .attr("height", h);
+                //箭头
+                var marker=svg.append("marker")
+                    .attr("id", "resolved")
+                    .attr("markerUnits","userSpaceOnUse")
+                    .attr("viewBox", "0 -5 10 10")//坐标系的区域
+                    .attr("refX",32)//箭头坐标
+                    .attr("refY", 0)
+                    .attr("markerWidth", 10)//标识的大小
+                    .attr("markerHeight", 10)
+                    .attr("orient", "auto")//绘制方向，可设定为：auto（自动确认方向）和 角度值
+                    .attr("stroke-width",2)//箭头宽度
+                    .append("path")
+                    .attr("d", "M0,-5L10,0L0,5")//箭头的路径
+                    .attr('fill','#0099cc');//箭头颜色
+
+
                 var link = svg.selectAll(".link");
                 var node = svg.selectAll(".node");
                 //引入力导向图
@@ -208,7 +224,9 @@
                     .enter().append("path")
                     .attr('d',function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y})
                     .attr('id',function(d,i){return 'path'+i;})
-                    .attr("class", "link");
+                    .attr("class", "link")
+                    .style('fill','#000')
+                    .attr("marker-end","url(#resolved)");
                 //节点
                 node = node.data(nodes)
                     .enter().append("circle")
