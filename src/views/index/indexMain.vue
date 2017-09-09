@@ -68,7 +68,7 @@
                 <div class="chartWrap box-shadow" id="chartId">
 
                 </div>
-            </div>
+            </div> 
         </section>
     </section>
 </template>
@@ -167,15 +167,16 @@
                 this.chartWidth=aChart.clientWidth;
             },
             getData(){
-                this.$http.get('/graph/data.gm').then(function(res){
+                /*this.$http.get('/graph/data.gm').then(function(res){
                     this.graph=res.data.data;
                     this.drawChart();//画图
-                })
+                })*/
+                this.drawChart();//画图
             },
             drawChart(){
                 console.dir(d3);
                 
-                /*var graph ={
+                this.graph ={
                     "nodes": [ { name: "BeiJing",type:"person"   }, { name: "XiaMen",type:'suit' },
                           { name: "XiAn"    }, { name: "HangZhou"   },
                           { name: "ShangHai"   }, { name: "QingDao"    },
@@ -183,7 +184,7 @@
                     "links": [  { source : 0  , target: 6 ,type:'联系人'} , { source : 0  , target: 4 ,type:'cc'} ,
                            { source : 2  , target: 3,type:'ww' } , { source : 1  , target: 4 ,type:'cc'} ,
                            { source : 1  , target: 5,type:'vv' } , { source : 3  , target: 6 ,type:'22'}  ]
-                }*/
+                }
                 let nodes=this.graph.nodes,
                     links=this.graph.links;
 
@@ -249,13 +250,16 @@
                     .data(links)  
                     .enter()  
                     .append("text")  
-                    .attr("class","linetext")  
+                    .attr("class","linetext") 
+                    .attr('x','0')
+                    .attr('dy','4') 
+                    .attr('text-anchor','middle')
                     .append('textPath').attr(
                         'xlink:href',function(d,i){
                             return '#path'+i;
                         }
                     )
-                    .attr('startOffset','15%')
+                    .attr('startOffset','50%')
                     .text(function(d){  
                         return d.type;  
                     })
@@ -298,11 +302,8 @@
                     svg_texts.attr("x", function(d){ return d.x-10; })
                         .attr("y", function(d){ return d.y+5; });
 
-                    /*node.attr("cx", function(d) { d.fx=d.x;return d.x; })
-                        .attr("cy", function(d) { d.fy=d.y;return d.y; });*/
-
-                    line_texts.attr("x",function(d){ return (d.source.x + d.target.x) / 2 ; })
-                        .attr("y",function(d){ return (d.source.y + d.target.y) / 2 ; }); 
+                    /*line_texts.attr("x",function(d){ return (d.source.x + d.target.x) / 2 ; })
+                        .attr("y",function(d){ return (d.source.y + d.target.y) / 2 ; }); */
                 }
                 function dragstarted(d) {
                     if (!d3.event.active) force.alphaTarget(0.3).restart();  //restart是重新恢复模拟
