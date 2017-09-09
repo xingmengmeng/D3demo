@@ -92,6 +92,9 @@
         background: #fff;
         cursor: pointer;
     }
+    .nodesText{
+        cursor: pointer;
+    }
 </style>
 
 <style lang="less" scoped>
@@ -272,11 +275,13 @@
                     .enter()
                     .append("text")
                     .style("fill", "black")
-                    .attr("x", -20)
-                    .attr("y", -20)
+                    .attr("x", 0)
+                    .attr("y", 0)
                     .text(function(d){
                         return d.name;
                     })
+                    .attr('text-anchor','middle')
+                    .attr('class','nodesText')
                     .call(d3.drag()
                         .on("start",dragstarted)
                         .on("drag",dragged)
@@ -335,7 +340,7 @@
                         });
 
                     //更新文字坐标
-                    svg_texts.attr("x", function(d){ return d.x-10; })
+                    svg_texts.attr("x", function(d){ return d.x; })
                         .attr("y", function(d){ return d.y+5; });
 
                     /*line_texts.attr("x",function(d){ return (d.source.x + d.target.x) / 2 ; })
