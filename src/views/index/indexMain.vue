@@ -13,30 +13,30 @@
                 <div class="everyDiv box-shadow">
                     <h5>调查概览：</h5>
                     <ul>
-                        <li>
-                            <span>评分-D</span>
-                            <ul>
+                        <li class="messLi">
+                            <span @click="changeShowF">评分-D</span>
+                            <ul v-show="showF==1">
                                 <li>1111</li>
                                 <li>222</li>
                             </ul>
                         </li>
-                        <li>
+                        <li class="messLi">
                             <span>评分-C</span>
-                            <ul>
+                            <ul v-show="showF==2">
                                 <li>1111</li>
                                 <li>222</li>
                             </ul>
                         </li>
-                        <li>
+                        <li class="messLi">
                             <span>评分-B</span>
-                            <ul>
+                            <ul v-show="showF==3">
                                 <li>1111</li>
                                 <li>222</li>
                             </ul>
                         </li>
-                        <li>
+                        <li class="messLi">
                             <span>评分-A</span>
-                            <ul>
+                            <ul v-show="showF==4">
                                 <li>1111</li>
                                 <li>222</li>
                             </ul>
@@ -46,14 +46,14 @@
                 <div class="everyDiv box-shadow">
                     <h5>主体属性：</h5>
                     <ul>
-                        <li>
+                        <li class="messLi">
                             <span>特有属性</span>
                             <ul>
                                 <li>1111</li>
                                 <li>222</li>
                             </ul>
                         </li>
-                        <li>
+                        <li class="messLi">
                             <span>共有属性</span>
                             <ul>
                                 <li>1111</li>
@@ -141,6 +141,23 @@
             box-sizing: border-box;
         }
     }
+    .everyDiv{
+        h5{
+            font-size: 14px;
+            padding:10px 0;
+        }
+        .messLi{
+            display: inline-block;
+            padding:5px 10px;
+            width: 100%;
+            border-bottom: 1px #ddd dashed;
+            box-sizing: border-box;
+            ul{
+                padding:5px 10px;
+                box-sizing:border-box;
+            }
+        }
+    }
 </style>
 <script>
     import * as d3 from "d3";
@@ -151,6 +168,7 @@
                 chartWidth:900,
                 chartHeight:400,
                 graph:null,
+                showF:-1,
             }
         },
         mounted(){
@@ -340,6 +358,9 @@
                     d.fy = null;
                 }
             },
+            changeShowF(){
+
+            }
         }
     }
 </script>
