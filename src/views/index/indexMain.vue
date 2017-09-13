@@ -253,7 +253,7 @@
                     .force("center",d3.forceCenter(w/2,h/2))
                     .on("tick",tick)
                     .nodes(nodes)
-                    .force("link",d3.forceLink(links).distance(150)/*.strength(2)*/);//forceLink连接力 distance连接线长度 strength连接强度
+                    .force("link",d3.forceLink(links).distance(180)/*.strength(2)*/);//forceLink连接力 distance连接线长度 strength连接强度
                 console.dir(force);
                 link=link.data(links)
                     .enter().append("path")
@@ -356,12 +356,12 @@
                     });  
                     
                     //更新节点坐标  限制节点位置
-                    
+                    var raduis=18;
                     node.attr('transform',function(d){
-                        d.x = d.x - (2*35) < 0  ? (2*35) : d.x ;
-                        d.x = d.x + (2*35) > w ? w - (2*35) : d.x ; 
-                        d.y = d.y - (2*35) < 0  ? (2*35) : d.y ;
-                        d.y = d.y + (2*35) > h ? h - (2*35) : d.y ;
+                        d.x = d.x - (2*raduis) < 0  ? (2*raduis) : d.x ;
+                        d.x = d.x + (2*raduis) > w ? w - (2*raduis) : d.x ; 
+                        d.y = d.y - (2*raduis) < 0  ? (2*raduis) : d.y ;
+                        d.y = d.y + (2*raduis) > h ? h - (2*raduis) : d.y ;
                         return 'translate('+d.x+','+d.y+')';})
                     //更新文字坐标
                     svg_texts.attr("x", function(d){ return d.x; })
