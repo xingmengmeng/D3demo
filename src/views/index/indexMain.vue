@@ -89,6 +89,8 @@
         cursor: pointer;
     }
     .linetext{
+        fill: #666;
+        font-size: 12px;
         background: #fff;
         cursor: pointer;
     }
@@ -188,16 +190,16 @@
                 this.chartWidth=aChart.clientWidth;
             },
             getData(){
-                /*this.$http.get('/graph/data.gm').then(function(res){
+                this.$http.get('/graph/data.gm?idNo=341823197004287053').then(function(res){
                     this.graph=res.data.data;
                     this.drawChart();//画图
-                })*/
-                this.drawChart();//画图
+                })
+                //this.drawChart();//画图
             },
             drawChart(){
                 console.dir(d3);
                 
-                this.graph ={
+                /*this.graph ={
                     "nodes": [ { name: "BeiJing",type:"person"   }, { name: "XiaMen",type:'suit' },
                           { name: "XiAn"    }, { name: "HangZhou"   },
                           { name: "ShangHai"   }, { name: "QingDao"    },
@@ -205,7 +207,7 @@
                     "links": [  { source : 0  , target: 6 ,type:'联系人'} , { source : 0  , target: 4 ,type:'cc'} ,
                            { source : 2  , target: 3,type:'ww' } , { source : 1  , target: 4 ,type:'cc'} ,
                            { source : 1  , target: 5,type:'vv' } , { source : 3  , target: 6 ,type:'22'}  ]
-                }
+                }*/
                 let nodes=this.graph.nodes,
                     links=this.graph.links;
 
@@ -252,17 +254,33 @@
                 node = node.data(nodes)
                     .enter().append("circle")
                     .attr("r", function(d){
-                        if(d.type=='person'){//根据type判断圈的大小
-                            return 30;
+                        if(d.type=='Person'){//根据type判断圈的大小
+                            return 35;
                         }else{
                             return 20;
                         }
                     })
                     .style("fill",function(d,i){
-                        if(d.type=='1'){
-                            return '#f1bebe'
+                        if(d.type=='Person'){
+                            return '#ccccff'
+                        }else if(d.type=='App'){
+                            return '#66b366'
+                        }else if(d.type=='Account'){
+                            return '#cce6cc'
+                        }else if(d.type=='Tel'){
+                            return '#ffffcc'
+                        }else if(d.type=='BankCard'){
+                            return '#f97bec'
+                        }else if(d.type=='Device'){
+                            return '#db9500'
+                        }else if(d.type=='House'){
+                            return '#da9b63'
+                        }else if(d.type=='Address'){
+                            return '#7b90ed'
+                        }else if(d.type=='Company'){
+                            return '#fa6e6b'
                         }
-						return '#ccccff'
+						return '#cccccc'
 					})
                     .call(d3.drag()
                         .on("start",dragstarted)
