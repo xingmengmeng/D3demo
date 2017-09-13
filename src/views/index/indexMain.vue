@@ -14,7 +14,7 @@
                     <h5>调查概览：</h5>
                     <ul>
                         <li class="messLi" v-for="(infos,index) in surveyInfos" :key="index">
-                            <span @click="changeShowF(infos.ocMenubm)" class="menuSpan">{{infos.name}} <i>{{infos.sl}}</i></span>
+                            <span @click="changeShowF(infos.ocMenubm,'showF')" class="menuSpan">{{infos.name}} <i>{{infos.sl}}</i></span>
                             <ul v-show="showF==infos.ocMenubm" v-if="infos">
                                 <li v-for="(ocMenu,curIndex) in infos.children" :key="curIndex">{{ocMenu.name}} <i>{{ocMenu.sl}}</i></li>
                                 <!--<li>222</li>-->
@@ -30,22 +30,22 @@
                     </ul>
                 </div>
                 <div class="everyDiv box-shadow">
-                    <h5>主体属性：</h5>
-                    <ul>
-                        <li class="messLi">
-                            <span>特有属性</span>
-                            <ul>
-                                <li>1111</li>
-                                <li>222</li>
+                    <h5>{{typeTitle}}：</h5>
+                    <ul v-if="attrData">
+                        <li class="messLi" v-for="(curD,index) in attrData" :key="index">
+                            <span @click="changeShowF(curD.ocMenubm,'showM')" class="menuSpan">{{curD.name}}</span>
+                            <ul v-show="showM==curD.ocMenubm" v-if="curD" class="attrDetails">
+                                <li v-for="(attrCur,attrIndex) in curD.children" :key="attrIndex">{{attrCur.name}}</li>
+                                <!--<li>222</li>-->
                             </ul>
                         </li>
-                        <li class="messLi">
+                        <!--<li class="messLi">
                             <span>共有属性</span>
                             <ul>
                                 <li>1111</li>
                                 <li>222</li>
                             </ul>
-                        </li>
+                        </li>-->
                     </ul>
                 </div>
             </div>
@@ -156,6 +156,10 @@
             }
         }
     }
+    .attrDetails{
+        max-height: 120px;
+        overflow-y: scroll;
+    }
 </style>
 <script>
     import * as d3 from "d3";
@@ -167,8 +171,11 @@
                 chartHeight:400,
                 graph:null,
                 showF:-1,
+                showM:-1,
                 idNo:'',
                 surveyInfos:null,//调查概览数据
+                attrData:null,//属性数据
+                typeTitle:'主体属性',
             }
         },
         mounted(){
@@ -186,9 +193,11 @@
             },
             getData(){
                 this.$http.get('/graph/data.gm?idNo='+this.idNo).then(function(res){
-                    this.graph=res.data.data;
-                    this.surveyInfos=res.data.data.surveyInfos.concat();
-                    this.drawChart();//画图
+                    if(res.data.code==200){
+                        this.graph=res.data.data;
+                        this.surveyInfos=res.data.data.surveyInfos.concat();
+                        this.drawChart();//画图
+                    }
                 })
                 //this.drawChart();//画图
             },
@@ -288,7 +297,10 @@
                         .on("start",dragstarted)
                         .on("drag",dragged)
                         .on("end",dragended))
-                    .on('click',_this.nodeClick);                                                                                                  
+                    .on('click',function(d){
+                        _this.nodeClick.call(this,d,this);
+                        nodeColor(d);
+                    });                                                                                                  
                 //节点上的文字
                 var svg_texts = svg.selectAll("text")
                     .data(nodes)
@@ -306,7 +318,11 @@
                         .on("start",dragstarted)
                         .on("drag",dragged)
                         .on("end",dragended))
-                    .on('click',_this.nodeClick);
+                    .on('click',function(d){
+                        _this.nodeClick.call(this,d,this);
+                        //d3.select(cur).style("fill","yellow");
+                        nodeColor(d);
+                    }); 
                 //线上的文字
                 var line_texts=svg.selectAll(".linetext")  
                     .data(links)  
@@ -379,29 +395,68 @@
                     d.fx = null;       //解除dragged中固定的坐标
                     d.fy = null;
                 }
-            },
-            changeShowF(menuId){
-                if(this.showF==menuId){
-                    this.showF=-1;
-                    return;
+                
+                function nodeColor(d){
+                    node.style("fill",function(node){
+                        if(d.id==node.id){
+                            return '#cc8b01';
+                        }else if(node.type=='Person'){
+                            return '#ccccff'
+                        }else if(node.type=='App'){
+                            return '#c7d890'
+                        }else if(node.type=='Account'){
+                            return '#9dbfe2'
+                        }else if(node.type=='Tel'){
+                            return '#e8a29b'
+                        }else if(node.type=='BankCard'){
+                            return '#fbe1a1'
+                        }else if(node.type=='Device'){
+                            return '#b2a4c1'
+                        }else if(node.type=='House'){
+                            return '#fbc8d9'
+                        }else if(node.type=='Address'){
+                            return '#c0ad9d'
+                        }else if(node.type=='Company'){
+                            return '#fbc999'
+                        }
+                    });
                 }
-                this.showF=menuId;
             },
-            nodeClick(d){
+            changeShowF(menuId,showStr){
+                if(showStr=='showF'){
+                    if(this.showF==menuId){
+                        this.showF=-1;
+                        return;
+                    }
+                    this.showF=menuId;
+                }else{
+                    if(this.showM==menuId){
+                        this.showM=-1;
+                        return;
+                    }
+                    this.showM=menuId;
+                } 
+            },
+            nodeClick(d,cur){
+                this.typeTitle='主体属性';
+
                 let nodeId=d.id,
                     nodeType=d.type;
                 this.$http.get('/graph/findSubjectAtt.gm?id='+nodeId+'&type='+nodeType).then(function(res){
-                    if(res.data.data.code==200){
-
+                    if(res.data.code==200){
+                        this.attrData=res.data.data.concat();
                     }
                 })
+                //d3.select(cur).style("fill","yellow");
             },
             lineClick(d){
+                this.typeTitle='关系属性';
+
                 let linkId=d.id,
                     linkType=d.type;
                 this.$http.get('/graph/findRelationAtt.gm?id='+linkId+'&type='+linkType).then(function(res){
-                    if(res.data.data.code==200){
-
+                    if(res.data.code==200){
+                        this.attrData=res.data.data.concat();
                     }
                 })
             }
