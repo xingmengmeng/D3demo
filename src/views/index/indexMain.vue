@@ -233,7 +233,7 @@
                     .attr("id", "resolved")
                     .attr("markerUnits","userSpaceOnUse")
                     .attr("viewBox", "0 -5 10 10")//坐标系的区域
-                    .attr("refX",32)//箭头坐标
+                    .attr("refX",36)//箭头坐标
                     .attr("refY", 0)
                     .attr("markerWidth", 10)//标识的大小
                     .attr("markerHeight", 10)
@@ -268,7 +268,7 @@
                         if(d.type=='Person'){//根据type判断圈的大小
                             return 35;
                         }else{
-                            return 20;
+                            return 25;
                         }
                     })
                     .style("fill",function(d,i){
@@ -376,8 +376,6 @@
                     svg_texts.attr("x", function(d){ return d.x; })
                         .attr("y", function(d){ return d.y+5; });
 
-                    /*line_texts.attr("x",function(d){ return (d.source.x + d.target.x) / 2 ; })
-                        .attr("y",function(d){ return (d.source.y + d.target.y) / 2 ; }); */
                 }
                 function dragstarted(d) {
                     if (!d3.event.active) force.alphaTarget(0.3).restart();  //restart是重新恢复模拟
