@@ -264,21 +264,21 @@
                         if(d.type=='Person'){
                             return '#ccccff'
                         }else if(d.type=='App'){
-                            return '#66b366'
+                            return '#c7d890'
                         }else if(d.type=='Account'){
-                            return '#cce6cc'
+                            return '#9dbfe2'
                         }else if(d.type=='Tel'){
-                            return '#ffffcc'
+                            return '#e8a29b'
                         }else if(d.type=='BankCard'){
-                            return '#f97bec'
+                            return '#fbe1a1'
                         }else if(d.type=='Device'){
-                            return '#db9500'
+                            return '#b2a4c1'
                         }else if(d.type=='House'){
-                            return '#da9b63'
+                            return '#fbc8d9'
                         }else if(d.type=='Address'){
-                            return '#7b90ed'
+                            return '#c0ad9d'
                         }else if(d.type=='Company'){
-                            return '#fa6e6b'
+                            return '#fbc999'
                         }
 						return '#cccccc'
 					})
