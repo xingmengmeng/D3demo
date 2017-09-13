@@ -202,6 +202,7 @@
                 //this.drawChart();//画图
             },
             drawChart(){
+                console.dir(d3);
                 const _this=this;
                 /*this.graph ={
                     "nodes": [ { name: "BeiJing",type:"person"   }, { name: "XiaMen",type:'suit' },
@@ -248,12 +249,12 @@
                 var node = svg.selectAll(".node");
                 //引入力导向图
                 let force = d3.forceSimulation()
-                    .force("charge",d3.forceManyBody().strength(-400))
+                    .force("charge",d3.forceManyBody().strength(-300))
                     .force("center",d3.forceCenter(w/2,h/2))
                     .on("tick",tick)
                     .nodes(nodes)
                     .force("link",d3.forceLink(links).distance(150)/*.strength(2)*/);//forceLink连接力 distance连接线长度 strength连接强度
-                
+                console.dir(force);
                 link=link.data(links)
                     .enter().append("path")
                     .attr('d',function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y})
@@ -355,23 +356,13 @@
                     });  
                     
                     //更新节点坐标  限制节点位置
-                    node.attr("cx",function(d){ 
-                            if( d.x < 0 ){
-                                d.x = 0+50;
-                            }else if( d.x > w ){
-                                d.x = w-50;
-                            }  
-                            return d.x; 
-                        })
-                        .attr("cy",function(d){ 
-                            if( d.y < 0 ){
-                                d.y = 0+50;
-                            }else if( d.y > h ){
-                                d.y = h-50;
-                            }
-                            return d.y; 
-                        });
-
+                    
+                    node.attr('transform',function(d){
+                        d.x = d.x - (2*35) < 0  ? (2*35) : d.x ;
+                        d.x = d.x + (2*35) > w ? w - (2*35) : d.x ; 
+                        d.y = d.y - (2*35) < 0  ? (2*35) : d.y ;
+                        d.y = d.y + (2*35) > h ? h - (2*35) : d.y ;
+                        return 'translate('+d.x+','+d.y+')';})
                     //更新文字坐标
                     svg_texts.attr("x", function(d){ return d.x; })
                         .attr("y", function(d){ return d.y+5; });
