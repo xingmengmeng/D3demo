@@ -16,7 +16,7 @@
                         <li class="messLi" v-for="(infos,index) in surveyInfos" :key="index">
                             <span @click="changeShowF(infos.ocMenubm,'showF')" class="menuSpan" :class="showF==infos.ocMenubm?'active':''">{{infos.name}} <i>{{infos.sl}}</i></span>
                             <ul v-show="showF==infos.ocMenubm" v-if="infos">
-                                <li v-for="(ocMenu,curIndex) in infos.children" :key="curIndex" @click="showAllNode(ocMenu.name)" class="typeLi">{{ocMenu.name}} <i>{{ocMenu.sl}}</i></li>
+                                <li v-for="(ocMenu,curIndex) in infos.children" :key="curIndex" @click="showAllNode(ocMenu.type)" class="typeLi">{{ocMenu.name}} <i>{{ocMenu.sl}}</i></li>
                                 <!--<li>222</li>-->
                             </ul>
                         </li>
