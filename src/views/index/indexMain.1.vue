@@ -287,8 +287,27 @@
                             return 25;
                         }
                     })
-                    .style("fill",function(node,i){
-                        return _this.fillColor(node);
+                    .style("fill",function(d,i){
+                        if(d.type=='Person'){
+                            return '#ccccff'
+                        }else if(d.type=='App'){
+                            return '#c7d890'
+                        }else if(d.type=='Account'){
+                            return '#9dbfe2'
+                        }else if(d.type=='Tel'){
+                            return '#e8a29b'
+                        }else if(d.type=='BankCard'){
+                            return '#fbe1a1'
+                        }else if(d.type=='Device'){
+                            return '#b2a4c1'
+                        }else if(d.type=='House'){
+                            return '#fbc8d9'
+                        }else if(d.type=='Address'){
+                            return '#c0ad9d'
+                        }else if(d.type=='Company'){
+                            return '#fbc999'
+                        }
+						return '#cccccc'
 					})
                     .call(d3.drag()
                         .on("start",dragstarted)
@@ -384,49 +403,55 @@
             },
             //点击力导向图中的点   改变颜色
             nodeColor(d){
-                var _this=this;
                 this.nodes.style("fill",function(node){
                     if(d.id==node.id){
                         return '#cc8b01';
-                    }else{
-                        return _this.fillColor(node);
+                    }else if(node.type=='Person'){
+                        return '#ccccff'
+                    }else if(node.type=='App'){
+                        return '#c7d890'
+                    }else if(node.type=='Account'){
+                        return '#9dbfe2'
+                    }else if(node.type=='Tel'){
+                        return '#e8a29b'
+                    }else if(node.type=='BankCard'){
+                        return '#fbe1a1'
+                    }else if(node.type=='Device'){
+                        return '#b2a4c1'
+                    }else if(node.type=='House'){
+                        return '#fbc8d9'
+                    }else if(node.type=='Address'){
+                        return '#c0ad9d'
+                    }else if(node.type=='Company'){
+                        return '#fbc999'
                     }
                 });
             },
             //点击评分列表  右侧图相应类型颜色变化
             showAllNode(typeStr){
-                var _this=this;
                 this.nodes.style("fill",function(node){
                     if(typeStr==node.type){
                         return '#cc8b01';
-                    }else{
-                        return _this.fillColor(node);
+                    }else if(node.type=='Person'){
+                        return '#ccccff'
+                    }else if(node.type=='App'){
+                        return '#c7d890'
+                    }else if(node.type=='Account'){
+                        return '#9dbfe2'
+                    }else if(node.type=='Tel'){
+                        return '#e8a29b'
+                    }else if(node.type=='BankCard'){
+                        return '#fbe1a1'
+                    }else if(node.type=='Device'){
+                        return '#b2a4c1'
+                    }else if(node.type=='House'){
+                        return '#fbc8d9'
+                    }else if(node.type=='Address'){
+                        return '#c0ad9d'
+                    }else if(node.type=='Company'){
+                        return '#fbc999'
                     }
                 });
-            },
-            //颜色设置  根绝类型设置
-            fillColor(node){
-                if(node.type=='Person'){
-                    return '#ccccff'
-                }else if(node.type=='App'){
-                    return '#c7d890'
-                }else if(node.type=='Account'){
-                    return '#9dbfe2'
-                }else if(node.type=='Tel'){
-                    return '#e8a29b'
-                }else if(node.type=='BankCard'){
-                    return '#fbe1a1'
-                }else if(node.type=='Device'){
-                    return '#b2a4c1'
-                }else if(node.type=='House'){
-                    return '#fbc8d9'
-                }else if(node.type=='Address'){
-                    return '#c0ad9d'
-                }else if(node.type=='Company'){
-                    return '#fbc999'
-                }else{
-                    return '#cccccc'
-                }
             },
             changeShowF(menuId,showStr){
                 if(showStr=='showF'){
