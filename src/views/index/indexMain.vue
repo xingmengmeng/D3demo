@@ -207,7 +207,7 @@
                 this.chartWidth=aChart.clientWidth;
             },
             getData(){
-                this.$http.get('/graph/data.gm?idNo='+this.idNo).then(function(res){
+                this.$http.get('/graph/data.gm?idNo='+this.idNo+'&pfbz=0').then(function(res){
                     if(res.data.code==200){
                         this.graph=res.data.data;
                         this.surveyInfos=res.data.data.surveyInfos.concat();
