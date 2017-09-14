@@ -16,7 +16,7 @@
                         <li class="messLi" v-for="(infos,index) in surveyInfos" :key="index">
                             <span @click="changeShowF(infos.ocMenubm,'showF')" class="menuSpan" :class="showF==infos.ocMenubm?'active':''">{{infos.name}} <i>{{infos.sl}}</i></span>
                             <ul v-show="showF==infos.ocMenubm" v-if="infos">
-                                <li v-for="(ocMenu,curIndex) in infos.children" :key="curIndex">{{ocMenu.name}} <i>{{ocMenu.sl}}</i></li>
+                                <li v-for="(ocMenu,curIndex) in infos.children" :key="curIndex" @click="showAllNode(ocMenu.name)">{{ocMenu.name}} <i>{{ocMenu.sl}}</i></li>
                                 <!--<li>222</li>-->
                             </ul>
                         </li>
@@ -186,6 +186,8 @@
                 surveyInfos:null,//调查概览数据
                 attrData:null,//属性数据
                 typeTitle:'主体属性',
+                nodes:null,
+                curType:'',
             }
         },
         mounted(){
@@ -310,8 +312,9 @@
                         .on("end",dragended))
                     .on('click',function(d){
                         _this.nodeClick.call(this,d,this);
-                        nodeColor(d);
-                    });                                                                                                  
+                        _this.nodeColor(d);
+                    });  
+                _this.nodes=node;                                                                                                
                 //节点上的文字
                 var svg_texts = svg.selectAll("text")
                     .data(nodes)
@@ -332,7 +335,7 @@
                     .on('click',function(d){
                         _this.nodeClick.call(this,d,this);
                         //d3.select(cur).style("fill","yellow");
-                        nodeColor(d);
+                        _this.nodeColor(d);
                     }); 
                 //线上的文字
                 var line_texts=svg.selectAll(".linetext")  
@@ -394,32 +397,58 @@
                     d.fx = null;       //解除dragged中固定的坐标
                     d.fy = null;
                 }
-                
-                function nodeColor(d){
-                    node.style("fill",function(node){
-                        if(d.id==node.id){
-                            return '#cc8b01';
-                        }else if(node.type=='Person'){
-                            return '#ccccff'
-                        }else if(node.type=='App'){
-                            return '#c7d890'
-                        }else if(node.type=='Account'){
-                            return '#9dbfe2'
-                        }else if(node.type=='Tel'){
-                            return '#e8a29b'
-                        }else if(node.type=='BankCard'){
-                            return '#fbe1a1'
-                        }else if(node.type=='Device'){
-                            return '#b2a4c1'
-                        }else if(node.type=='House'){
-                            return '#fbc8d9'
-                        }else if(node.type=='Address'){
-                            return '#c0ad9d'
-                        }else if(node.type=='Company'){
-                            return '#fbc999'
-                        }
-                    });
-                }
+            },
+            //点击力导向图中的点   改变颜色
+            nodeColor(d){
+                this.nodes.style("fill",function(node){
+                    if(d.id==node.id){
+                        return '#cc8b01';
+                    }else if(node.type=='Person'){
+                        return '#ccccff'
+                    }else if(node.type=='App'){
+                        return '#c7d890'
+                    }else if(node.type=='Account'){
+                        return '#9dbfe2'
+                    }else if(node.type=='Tel'){
+                        return '#e8a29b'
+                    }else if(node.type=='BankCard'){
+                        return '#fbe1a1'
+                    }else if(node.type=='Device'){
+                        return '#b2a4c1'
+                    }else if(node.type=='House'){
+                        return '#fbc8d9'
+                    }else if(node.type=='Address'){
+                        return '#c0ad9d'
+                    }else if(node.type=='Company'){
+                        return '#fbc999'
+                    }
+                });
+            },
+            //点击评分列表  右侧图相应类型颜色变化
+            showAllNode(typeStr){
+                this.nodes.style("fill",function(node){
+                    if(typeStr==node.type){
+                        return '#cc8b01';
+                    }else if(node.type=='Person'){
+                        return '#ccccff'
+                    }else if(node.type=='App'){
+                        return '#c7d890'
+                    }else if(node.type=='Account'){
+                        return '#9dbfe2'
+                    }else if(node.type=='Tel'){
+                        return '#e8a29b'
+                    }else if(node.type=='BankCard'){
+                        return '#fbe1a1'
+                    }else if(node.type=='Device'){
+                        return '#b2a4c1'
+                    }else if(node.type=='House'){
+                        return '#fbc8d9'
+                    }else if(node.type=='Address'){
+                        return '#c0ad9d'
+                    }else if(node.type=='Company'){
+                        return '#fbc999'
+                    }
+                });
             },
             changeShowF(menuId,showStr){
                 if(showStr=='showF'){
