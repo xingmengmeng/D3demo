@@ -14,7 +14,7 @@
                     <h5>调查概览：</h5>
                     <ul>
                         <li class="messLi" v-for="(infos,index) in surveyInfos" :key="index">
-                            <span @click="changeShowF(infos.ocMenubm,'showF')" class="menuSpan">{{infos.name}} <i>{{infos.sl}}</i></span>
+                            <span @click="changeShowF(infos.ocMenubm,'showF')" class="menuSpan" :class="showF==infos.ocMenubm?'active':''">{{infos.name}} <i>{{infos.sl}}</i></span>
                             <ul v-show="showF==infos.ocMenubm" v-if="infos">
                                 <li v-for="(ocMenu,curIndex) in infos.children" :key="curIndex">{{ocMenu.name}} <i>{{ocMenu.sl}}</i></li>
                                 <!--<li>222</li>-->
@@ -33,7 +33,7 @@
                     <h5>{{typeTitle}}：</h5>
                     <ul v-if="attrData">
                         <li class="messLi" v-for="(curD,index) in attrData" :key="index">
-                            <span @click="changeShowF(curD.ocMenubm,'showM')" class="menuSpan">{{curD.name}}</span>
+                            <span @click="changeShowF(curD.ocMenubm,'showM')" class="menuSpan" :class="showM==curD.ocMenubm?'active':''">{{curD.name}}</span>
                             <ul v-show="showM==curD.ocMenubm" v-if="curD" class="attrDetails">
                                 <li v-for="(attrCur,attrIndex) in curD.children" :key="attrIndex">{{attrCur.name}}</li>
                                 <!--<li>222</li>-->
@@ -148,7 +148,17 @@
                 box-sizing:border-box;
             }
             .menuSpan{
+                display: inline-block;
+                padding-right:30px;
+                width: 100%;
+                background: url(../../assets/images/showNext.png) right center no-repeat;
+                background-size: 14px 10px;
+                box-sizing: border-box;
                 cursor: pointer;
+                &.active{
+                    background: url(../../assets/images/hideNext.png) right center no-repeat;
+                    background-size: 14px 10px;
+                }
             }
             i{
                 float: right;
