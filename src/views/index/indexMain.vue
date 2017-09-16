@@ -222,7 +222,6 @@
                 this.drawChart();//画图
             },
             drawChart(){
-                console.dir(d3);
                 const _this=this;
                 this.graph ={
                     "nodes": [ { name: "BeiJing",type:"person" ,id:'1'  }, { name: "XiaMen",type:'suit',id:'2' },
