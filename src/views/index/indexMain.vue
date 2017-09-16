@@ -200,7 +200,7 @@
         },
         mounted(){
             this.getChartHeight();
-            this.getData();
+            //this.getData();
         },
         methods:{
             getChartHeight(){
@@ -212,18 +212,18 @@
                 this.chartWidth=aChart.clientWidth;
             },
             getData(){
-                /*this.$http.get('/graph/data.gm?idNo='+this.idNo+'&pfbz=0').then(function(res){
+                this.$http.get('/graph/data.gm?idNo='+this.idNo+'&pfbz=0').then(function(res){
                     if(res.data.code==200){
                         this.graph=res.data.data;
                         this.surveyInfos=res.data.data.surveyInfos.concat();
                         this.drawChart();//画图
                     }
-                })*/
-                this.drawChart();//画图
+                })
+                //this.drawChart();//画图
             },
             drawChart(){
                 const _this=this;
-                this.graph ={
+                /*this.graph ={
                     "nodes": [ { name: "BeiJing",type:"person" ,id:'1'  }, { name: "XiaMen",type:'suit',id:'2' },
                           { name: "XiAn",id:'3'    }, { name: "HangZhou" ,id:'4'  },
                           { name: "ShangHai" ,id:'5'  }, { name: "QingDao"  ,id:'6'  },
@@ -231,7 +231,7 @@
                     "links": [  { source : 0  , target: 6 ,type:'联系人'} , { source : 0  , target: 4 ,type:'cc'} ,
                            { source : 2  , target: 3,type:'ww' } , { source : 1  , target: 4 ,type:'cc'} ,
                            { source : 1  , target: 5,type:'vv' } , { source : 3  , target: 6 ,type:'22'}  ]
-                }
+                }*/
                 //每次请求完重新加载显示图
                 d3.select('#svgId').remove();   //删除整个SVG
                 d3.select('#svgId')
