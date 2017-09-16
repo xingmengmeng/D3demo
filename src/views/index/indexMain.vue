@@ -60,7 +60,7 @@
 </template>
 <style>
     .link {
-        stroke: #0099cc;
+        stroke: #a5abb6;
         stroke-width: 1px;
     }
     .node {
@@ -69,15 +69,20 @@
         stroke: #000;
         stroke-width: 1.5px;
     }
-    circle {
-        stroke: #c8c8c8;
+    .circle {
+        stroke: #9aa1ac;
         stroke-width: 1px;
+        cursor: pointer;
+    }
+    .circleActive {
+        stroke: #ceebfe;
+        stroke-width: 5px;
         cursor: pointer;
     }
     .linetext{
         fill: #666;
         font-size: 12px;
-        background: #fff;
+        background-color: #fff;
         cursor: pointer;
     }
     .nodesText{
@@ -195,7 +200,7 @@
         },
         mounted(){
             this.getChartHeight();
-            //this.getData();
+            this.getData();
         },
         methods:{
             getChartHeight(){
@@ -207,27 +212,27 @@
                 this.chartWidth=aChart.clientWidth;
             },
             getData(){
-                this.$http.get('/graph/data.gm?idNo='+this.idNo+'&pfbz=0').then(function(res){
+                /*this.$http.get('/graph/data.gm?idNo='+this.idNo+'&pfbz=0').then(function(res){
                     if(res.data.code==200){
                         this.graph=res.data.data;
                         this.surveyInfos=res.data.data.surveyInfos.concat();
                         this.drawChart();//画图
                     }
-                })
-                //this.drawChart();//画图
+                })*/
+                this.drawChart();//画图
             },
             drawChart(){
                 console.dir(d3);
                 const _this=this;
-                /*this.graph ={
-                    "nodes": [ { name: "BeiJing",type:"person"   }, { name: "XiaMen",type:'suit' },
-                          { name: "XiAn"    }, { name: "HangZhou"   },
-                          { name: "ShangHai"   }, { name: "QingDao"    },
-                          { name: "NanJing"    } ],
+                this.graph ={
+                    "nodes": [ { name: "BeiJing",type:"person" ,id:'1'  }, { name: "XiaMen",type:'suit',id:'2' },
+                          { name: "XiAn",id:'3'    }, { name: "HangZhou" ,id:'4'  },
+                          { name: "ShangHai" ,id:'5'  }, { name: "QingDao"  ,id:'6'  },
+                          { name: "NanJing"  ,id:'7'  } ],
                     "links": [  { source : 0  , target: 6 ,type:'联系人'} , { source : 0  , target: 4 ,type:'cc'} ,
                            { source : 2  , target: 3,type:'ww' } , { source : 1  , target: 4 ,type:'cc'} ,
                            { source : 1  , target: 5,type:'vv' } , { source : 3  , target: 6 ,type:'22'}  ]
-                }*/
+                }
                 //每次请求完重新加载显示图
                 d3.select('#svgId').remove();   //删除整个SVG
                 d3.select('#svgId')
@@ -257,7 +262,7 @@
                     .attr("stroke-width",2)//箭头宽度
                     .append("path")
                     .attr("d", "M0,-5L10,0L0,5")//箭头的路径
-                    .attr('fill','#0099cc');//箭头颜色
+                    .attr('fill','#a5abb6');//箭头颜色
 
 
                 var link = svg.selectAll(".link");
@@ -287,6 +292,7 @@
                             return 25;
                         }
                     })
+                    .attr('class','circle')
                     .style("fill",function(node,i){
                         return _this.fillColor(node);
 					})
@@ -385,22 +391,36 @@
             //点击力导向图中的点   改变颜色
             nodeColor(d){
                 var _this=this;
-                this.nodes.style("fill",function(node){
+                /*this.nodes.style("fill",function(node){
                     if(d.id==node.id){
                         return '#cc8b01';
                     }else{
                         return _this.fillColor(node);
+                    }
+                });*/
+                this.nodes.attr("class",function(node){
+                    if(d.id==node.id){
+                        return 'circleActive';
+                    }else{
+                        return 'circle';
                     }
                 });
             },
             //点击评分列表  右侧图相应类型颜色变化
             showAllNode(typeStr){
                 var _this=this;
-                this.nodes.style("fill",function(node){
+                /*this.nodes.style("fill",function(node){
                     if(typeStr==node.type){
                         return '#cc8b01';
                     }else{
                         return _this.fillColor(node);
+                    }
+                });*/
+                this.nodes.attr("class",function(node){
+                    if(typeStr==node.type){
+                        return 'circleActive';
+                    }else{
+                        return 'circle';
                     }
                 });
             },
