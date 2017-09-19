@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="rightSide">
-                <h5 class="chartTitle box-shadow">关系图</h5>
+                <h5 class="chartTitle box-shadow">关系图 <i @click="onStatus=!onStatus" :class="onStatus?'active':''"></i></h5>
                 <div class="chartWrap box-shadow" id="chartId">
 
                 </div>
@@ -131,6 +131,19 @@
             line-height: 30px;
             border:1px #ddd solid;
             box-sizing: border-box;
+            i{
+                float: right;
+                margin-top:4px;
+                width: 54px;
+                height: 34px;
+                background: url(../../assets/images/off.png) no-repeat;
+                background-size: 70%;
+                cursor: pointer;
+                &.active{
+                    background: url(../../assets/images/on.png) no-repeat;
+                    background-size: 70%;
+                }
+            }
         }
         .chartWrap{
             border:1px #ddd solid;
@@ -196,11 +209,19 @@
                 typeTitle:'主体属性',
                 nodes:null,
                 curType:'',
+                onStatus:true,//开关状态
             }
         },
         mounted(){
             this.getChartHeight();
             //this.getData();
+        },
+        watch:{
+            onStatus(str){
+                if(this.idNo){
+                    this.getData();
+                }
+            }
         },
         methods:{
             getChartHeight(){
@@ -212,7 +233,8 @@
                 this.chartWidth=aChart.clientWidth;
             },
             getData(){
-                this.$http.get('/graph/data.gm?idNo='+this.idNo+'&pfbz=0').then(function(res){
+                let pfbz=this.onStatus?0:1;
+                this.$http.get('/graph/data.gm?idNo='+this.idNo+'&pfbz='+pfbz).then(function(res){
                     if(res.data.code==200){
                         this.graph=res.data.data;
                         this.surveyInfos=res.data.data.surveyInfos.concat();
@@ -273,7 +295,7 @@
                     .on("tick",tick)
                     .nodes(nodes)
                     .force("link",d3.forceLink(links).distance(180)/*.strength(2)*/);//forceLink连接力 distance连接线长度 strength连接强度
-                console.dir(force);
+                
                 link=link.data(links)
                     .enter().append("path")
                     .attr('d',function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y})
