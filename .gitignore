@@ -5,7 +5,7 @@ ehthumbs.db
 .project
 node_modules/
 build/
-dist/
+dev/
 text/
 test/
 
