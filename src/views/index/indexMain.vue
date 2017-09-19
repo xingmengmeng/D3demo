@@ -449,21 +449,21 @@
             fillColor(node){
                 if(node.type=='Person'){
                     return '#ccccff'
-                }else if(node.type=='App'){
+                }else if(node.type=='Apply'){
                     return '#c7d890'
-                }else if(node.type=='Account'){
+                }else if(node.type=='Address'){
                     return '#9dbfe2'
-                }else if(node.type=='Tel'){
+                }else if(node.type=='Company'){
                     return '#e8a29b'
                 }else if(node.type=='BankCard'){
                     return '#fbe1a1'
-                }else if(node.type=='Device'){
+                }else if(node.type=='SocialMediaId'){
                     return '#b2a4c1'
-                }else if(node.type=='House'){
+                }else if(node.type=='Device'){
                     return '#fbc8d9'
-                }else if(node.type=='Address'){
+                }else if(node.type=='HouseProperty'){
                     return '#c0ad9d'
-                }else if(node.type=='Company'){
+                }else if(node.type=='Telephone'){
                     return '#fbc999'
                 }else{
                     return '#cccccc'
