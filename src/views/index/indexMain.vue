@@ -69,11 +69,6 @@
         stroke: #000;
         stroke-width: 1.5px;
     }
-    .circle {
-        stroke: #9aa1ac;
-        stroke-width: 1px;
-        cursor: pointer;
-    }
     .circleActive {
         stroke: #ceebfe;
         stroke-width: 5px;
@@ -275,7 +270,7 @@
                     .attr("id", "resolved")
                     .attr("markerUnits","userSpaceOnUse")
                     .attr("viewBox", "0 -5 10 10")//坐标系的区域
-                    .attr("refX",36)//箭头坐标
+                    .attr("refX",45)//箭头坐标
                     .attr("refY", 0)
                     .attr("markerWidth", 10)//标识的大小
                     .attr("markerHeight", 10)
@@ -308,15 +303,18 @@
                     .enter().append("circle")
                     .attr("r", function(d){
                         if(d.type=='Person'){//根据type判断圈的大小
-                            return 35;
+                            return 40;
                         }else{
-                            return 25;
+                            return 32;
                         }
                     })
-                    .attr('class','circle')
                     .style("fill",function(node,i){
                         return _this.fillColor(node);
 					})
+                    .attr('stroke',function(d){
+                        return _this.strColor(d);
+                    })
+                    .attr('stroke-width','3px')
                     .call(d3.drag()
                         .on("start",dragstarted)
                         .on("drag",dragged)
@@ -331,7 +329,7 @@
                     .data(nodes)
                     .enter()
                     .append("text")
-                    .style("fill", "black")
+                    .style("fill", "#fff")
                     .attr("x", 0)
                     .attr("y", 0)
                     .text(function(d){
@@ -345,7 +343,6 @@
                         .on("end",dragended))
                     .on('click',function(d){
                         _this.nodeClick.call(this,d,this);
-                        //d3.select(cur).style("fill","yellow");
                         _this.nodeColor(d);
                     }); 
                 //线上的文字
@@ -380,7 +377,7 @@
                     });  
                     
                     //更新节点坐标  限制节点位置
-                    var raduis=18;
+                    var raduis=20;
                     node.attr('transform',function(d){
                         d.x = d.x - (2*raduis) < 0  ? (2*raduis) : d.x ;
                         d.x = d.x + (2*raduis) > w ? w - (2*raduis) : d.x ; 
@@ -448,25 +445,46 @@
             //颜色设置  根绝类型设置
             fillColor(node){
                 if(node.type=='Person'){
-                    return '#ccccff'
+                    return '#8588ff'
                 }else if(node.type=='Apply'){
-                    return '#c7d890'
+                    return '#f66f13'
                 }else if(node.type=='Address'){
-                    return '#9dbfe2'
+                    return '#c3e20e'
                 }else if(node.type=='Company'){
-                    return '#e8a29b'
+                    return '#ed6cac'
                 }else if(node.type=='BankCard'){
-                    return '#fbe1a1'
+                    return '#50e3c2'
                 }else if(node.type=='SocialMediaId'){
-                    return '#b2a4c1'
+                    return '#69aef4'
                 }else if(node.type=='Device'){
-                    return '#fbc8d9'
+                    return '#ffbf2f'
                 }else if(node.type=='HouseProperty'){
-                    return '#c0ad9d'
+                    return '#8de0ff'
                 }else if(node.type=='Telephone'){
                     return '#fbc999'
                 }else{
-                    return '#cccccc'
+                    return '#ccc'
+                }
+            },
+            strColor(node){
+                if(node.type=='Person'){
+                    return 'rgb(194,195,255)'
+                }else if(node.type=='Apply'){
+                    return 'rgb(250,183,137)'
+                }else if(node.type=='Address'){
+                    return 'rgb(225,240,134)'
+                }else if(node.type=='Company'){
+                    return 'rgb(246,181,213)'
+                }else if(node.type=='BankCard'){
+                    return 'rgb(167,241,224)'
+                }else if(node.type=='SocialMediaId'){
+                    return 'rgb(180,214,249)'
+                }else if(node.type=='Device'){
+                    return 'rgb(255,223,151)'
+                }else if(node.type=='HouseProperty'){
+                    return 'rgb(198,239,255)'
+                }else if(node.type=='Telephone'){
+                    return 'rgb(254,220,187)'
                 }
             },
             changeShowF(menuId,showStr){
