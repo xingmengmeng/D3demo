@@ -270,7 +270,7 @@
                     .attr("id", "resolved")
                     .attr("markerUnits","userSpaceOnUse")
                     .attr("viewBox", "0 -5 10 10")//坐标系的区域
-                    .attr("refX",45)//箭头坐标
+                    .attr("refX",43)//箭头坐标
                     .attr("refY", 0)
                     .attr("markerWidth", 10)//标识的大小
                     .attr("markerHeight", 10)
@@ -302,8 +302,8 @@
                 node = node.data(nodes)
                     .enter().append("circle")
                     .attr("r", function(d){
-                        if(d.type=='Person'){//根据type判断圈的大小
-                            return 40;
+                        if(d.type=='Person'||d.type=='Main'){//根据type判断圈的大小
+                            return 38;
                         }else{
                             return 32;
                         }
@@ -377,7 +377,7 @@
                     });  
                     
                     //更新节点坐标  限制节点位置
-                    var raduis=23;
+                    var raduis=22;
                     node.attr('transform',function(d){
                         d.x = d.x - (2*raduis) < 0  ? (2*raduis) : d.x ;
                         d.x = d.x + (2*raduis) > w ? w - (2*raduis) : d.x ; 
@@ -446,6 +446,8 @@
             fillColor(node){
                 if(node.type=='Person'){
                     return '#8588ff'
+                }else if(node.type=='Main'){
+                    return '#82c3e8'
                 }else if(node.type=='Apply'){
                     return '#f66f13'
                 }else if(node.type=='Address'){
@@ -469,6 +471,8 @@
             strColor(node){
                 if(node.type=='Person'){
                     return 'rgb(194,195,255)'
+                }else if(node.type=='Main'){
+                    return 'rgb(182,228,254)'
                 }else if(node.type=='Apply'){
                     return 'rgb(250,183,137)'
                 }else if(node.type=='Address'){
