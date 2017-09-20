@@ -377,7 +377,7 @@
                     });  
                     
                     //更新节点坐标  限制节点位置
-                    var raduis=20;
+                    var raduis=23;
                     node.attr('transform',function(d){
                         d.x = d.x - (2*raduis) < 0  ? (2*raduis) : d.x ;
                         d.x = d.x + (2*raduis) > w ? w - (2*raduis) : d.x ; 
