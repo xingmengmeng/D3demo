@@ -438,8 +438,8 @@
 
                 function dragended(d) {
                     if (!d3.event.active) force.alphaTarget(0);
-                    d.fx = null;       //解除dragged中固定的坐标
-                    d.fy = null;
+                    d.fx = d3.event.x;       //解除dragged中固定的坐标
+                    d.fy = d3.event.y;
                 }
             },
             //点击力导向图中的点   改变颜色
