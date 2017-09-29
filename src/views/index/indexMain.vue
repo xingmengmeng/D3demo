@@ -52,7 +52,7 @@
             <div class="rightSide">
                 <h5 class="chartTitle box-shadow">关系图 <i @click="onStatus=!onStatus" :class="onStatus?'active':''"></i></h5>
                 <div class="chartWrap box-shadow" id="chartId">
-
+                    <span class="errorSpan">{{error}}</span>
                 </div>
             </div> 
         </section>
@@ -60,6 +60,7 @@
 </template>
 <style>
     .link {
+        fill:none;
         stroke: #a5abb6;
         stroke-width: 1px;
     }
@@ -141,8 +142,14 @@
             }
         }
         .chartWrap{
+            position: relative;
             border:1px #ddd solid;
             box-sizing: border-box;
+            .errorSpan{
+                position: absolute;
+                top:50%;
+                left:50%;
+            }
         }
     }
     .everyDiv{
@@ -205,11 +212,12 @@
                 nodes:null,
                 curType:'',
                 onStatus:true,//开关状态
+                error:'',
             }
         },
         mounted(){
             this.getChartHeight();
-            //this.getData();
+            this.getData();
         },
         watch:{
             onStatus(str){
@@ -229,26 +237,26 @@
             },
             getData(){
                 let pfbz=this.onStatus?0:1;
-                this.$http.get('/graph/data.gm?idNo='+this.idNo+'&pfbz='+pfbz).then(function(res){
+                /*this.$http.get('/graph/data.gm?idNo='+this.idNo+'&pfbz='+pfbz).then(function(res){
                     if(res.data.code==200){
                         this.graph=res.data.data;
                         this.surveyInfos=res.data.data.surveyInfos.concat();
                         this.drawChart();//画图
                     }
-                })
-                //this.drawChart();//画图
+                })*/
+                this.drawChart();//画图
             },
             drawChart(){
                 const _this=this;
-                /*this.graph ={
+                this.graph ={
                     "nodes": [ { name: "BeiJing",type:"person" ,id:'1'  }, { name: "XiaMen",type:'suit',id:'2' },
                           { name: "XiAn",id:'3'    }, { name: "HangZhou" ,id:'4'  },
                           { name: "ShangHai" ,id:'5'  }, { name: "QingDao"  ,id:'6'  },
                           { name: "NanJing"  ,id:'7'  } ],
                     "links": [  { source : 0  , target: 6 ,type:'联系人'} , { source : 0  , target: 4 ,type:'cc'} ,
                            { source : 2  , target: 3,type:'ww' } , { source : 1  , target: 4 ,type:'cc'} ,
-                           { source : 1  , target: 5,type:'vv' } , { source : 3  , target: 6 ,type:'22'}  ]
-                }*/
+                           { source : 1  , target: 5,type:'vv' } , { source : 1  , target: 5,type:'ljfksjfs' ,arrow:'back'} ,{ source : 3  , target: 6 ,type:'22'}  ]
+                }
                 //每次请求完重新加载显示图
                 d3.select('#svgId').remove();   //删除整个SVG
                 d3.select('#svgId')
@@ -271,7 +279,20 @@
                     .attr("markerUnits","userSpaceOnUse")
                     .attr("viewBox", "0 -5 10 10")//坐标系的区域
                     .attr("refX",43)//箭头坐标
-                    .attr("refY", 0)
+                    .attr("refY", -4)
+                    .attr("markerWidth", 10)//标识的大小
+                    .attr("markerHeight", 10)
+                    .attr("orient", "auto")//绘制方向，可设定为：auto（自动确认方向）和 角度值
+                    .attr("stroke-width",2)//箭头宽度
+                    .append("path")
+                    .attr("d", "M0,-5L10,0L0,5")//箭头的路径
+                    .attr('fill','#a5abb6');//箭头颜色
+                var marker2=svg.append("marker")
+                    .attr("id", "resolved2")
+                    .attr("markerUnits","userSpaceOnUse")
+                    .attr("viewBox", "0 -5 10 10")//坐标系的区域
+                    .attr("refX",43)//箭头坐标
+                    .attr("refY", 4)
                     .attr("markerWidth", 10)//标识的大小
                     .attr("markerHeight", 10)
                     .attr("orient", "auto")//绘制方向，可设定为：auto（自动确认方向）和 角度值
@@ -296,8 +317,13 @@
                     .attr('d',function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y})
                     .attr('id',function(d,i){return 'path'+i;})
                     .attr("class", "link")
-                    .style('fill','#000')
-                    .attr("marker-end","url(#resolved)");
+                    .attr("marker-end",function(d){
+                        if(d.arrow=='back'){
+                            return "url(#resolved2)"
+                        }else{
+                            return "url(#resolved)"
+                        }
+                    });
                 //节点
                 node = node.data(nodes)
                     .enter().append("circle")
@@ -372,7 +398,18 @@
                         .attr("x2", function(d) { return d.target.x; })
                         .attr("y2", function(d) { return d.target.y; });*/
                     link.attr('d', function(d) { 
-                        var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;
+                        /*var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;
+                        return path;*/
+                        var dx = d.target.x - d.source.x,//增量
+                            dy = d.target.y - d.source.y,
+                            dr = Math.sqrt(dx * dx + dy * dy);
+                        if(d.arrow=='back'){
+                            var path="M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,0 " + d.target.x + "," + d.target.y;
+                        }else{
+                            var path="M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+                        }
+                        console.log(path);
+                        //var path="M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
                         return path;
                     });  
                     
