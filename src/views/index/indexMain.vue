@@ -71,7 +71,7 @@
         stroke-width: 1.5px;
     }
     .circleActive {
-        stroke: #ceebfe;
+        stroke: #ff3333;
         stroke-width: 5px;
         cursor: pointer;
     }
