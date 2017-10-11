@@ -315,8 +315,8 @@
                     .attr("refX",43)//箭头坐标
                     .attr("refY", function(d){
                         if(d=='resolved') return 0;
-                        if(d=='resolved2') return 4;
-                        if(d=='resolved3') return -4;
+                        if(d=='resolved2') return 2;
+                        if(d=='resolved3') return -2;
                     })
                     .attr("markerWidth", 10)//标识的大小
                     .attr("markerHeight", 10)
