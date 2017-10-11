@@ -305,16 +305,22 @@
                     .attr("width", w)
                     .attr("height", h);
                 //箭头
-                var marker=svg.append("marker")
-                    .attr("id", "resolved")
+                var marker=svg.selectAll("marker")  
+                    .data(["resolved", "resolved2", "resolved3"]) 
+                    .enter().append("marker")
+                    .data(["resolved", "resolved2", "resolved3"])
+                    .attr("id", String)
                     .attr("markerUnits","userSpaceOnUse")
                     .attr("viewBox", "0 -5 10 10")//坐标系的区域
                     .attr("refX",43)//箭头坐标
-                    .attr("refY", 0)
+                    .attr("refY", function(d){
+                        if(d=='resolved') return 0;
+                        if(d=='resolved2') return 4;
+                        if(d=='resolved3') return -4;
+                    })
                     .attr("markerWidth", 10)//标识的大小
                     .attr("markerHeight", 10)
                     .attr("orient", "auto")//绘制方向，可设定为：auto（自动确认方向）和 角度值
-                    //.attr("stroke-width",2)//箭头宽度
                     .append("path")
                     .attr("d", "M0,-5L10,0L0,5")//箭头的路径
                     .attr('fill','#a5abb6');//箭头颜色
@@ -334,7 +340,15 @@
                     .attr('d',function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y})
                     .attr('id',function(d,i){return 'path'+i;})
                     .attr("class", "link")
-                    .attr("marker-end","url(#resolved)");
+                    .attr("marker-end",function(d){
+                        if(d.size==1&&d.linknum==1){
+                            return "url(#resolved)";
+                        }else if(d.size!=1&&d.linknum==1){
+                            return "url(#resolved3)";
+                        }else{
+                            return "url(#resolved2)";
+                        }
+                    });
                 //节点
                 node = node.data(nodes)
                     .enter().append("circle")
