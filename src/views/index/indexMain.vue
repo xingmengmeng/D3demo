@@ -280,8 +280,7 @@
                         linkGroup[key]=[];  
                     }  
                     linkGroup[key].push(links[i]);  
-                } 
-                console.log(linkGroup) 
+                }  
                 //为每一条连接线分配size属性，同时对每一组连接线进行编号  
                 for(var i=0; i<links.length; i++){  
                     var key = links[i].source<links[i].target?links[i].source+':'+links[i].target:links[i].target+':'+links[i].source;  
@@ -341,13 +340,29 @@
                     .attr('id',function(d,i){return 'path'+i;})
                     .attr("class", "link")
                     .attr("marker-end",function(d){
-                        if(d.size==1&&d.linknum==1){
+                        console.log(d);
+                        /*if((d.size==1&&d.linknum==1)||(d.size==3&&d.linknum==1)){
                             return "url(#resolved)";
-                        }else if(d.size!=1&&d.linknum==1){
+                        }else if((d.size==2&&d.linknum==1)||(d.size==3&&d.linknum==2)){
                             return "url(#resolved3)";
-                        }else{
+                        }else if((d.size==2&&d.linknum==-1)||(d.size==3&&d.linknum==-2)){
                             return "url(#resolved2)";
-                        }
+                        }*/
+                        let isEven=d.size%2==0?true:false;//判断size是不是偶数
+                        let numIsEven=d.linknum%2==0?true:false;//判断size是不是偶数
+                        if(d.linknum<0){
+                            return "url(#resolved2)";
+                        }else{
+                            if(isEven){//size偶数 且正弧度
+                                return "url(#resolved3)";
+                            }else{//size基数 且正弧度
+                                if(numIsEven){//偶数线
+                                    return "url(#resolved3)";
+                                }else{
+                                    return "url(#resolved)";
+                                }
+                            }
+                        } 
                     });
                 //节点
                 node = node.data(nodes)
@@ -540,13 +555,6 @@
             //点击力导向图中的点   改变颜色
             nodeColor(d){
                 var _this=this;
-                /*this.nodes.style("fill",function(node){
-                    if(d.id==node.id){
-                        return '#cc8b01';
-                    }else{
-                        return _this.fillColor(node);
-                    }
-                });*/
                 this.nodes.attr("class",function(node){
                     if(d.id==node.id){
                         return 'circleActive';
@@ -558,13 +566,6 @@
             //点击评分列表  右侧图相应类型颜色变化
             showAllNode(typeStr){
                 var _this=this;
-                /*this.nodes.style("fill",function(node){
-                    if(typeStr==node.type){
-                        return '#cc8b01';
-                    }else{
-                        return _this.fillColor(node);
-                    }
-                });*/
                 this.nodes.attr("class",function(node){
                     if(typeStr==node.type){
                         return 'circleActive';
@@ -647,11 +648,9 @@
                         this.attrData=res.data.data.concat();
                     }
                 })
-                //d3.select(cur).style("fill","yellow");
             },
             lineClick(d){
                 this.typeTitle='关系属性';
-
                 let linkId=d.id,
                     linkType=d.type;
                 this.$http.get('/graph/findRelationAtt.gm?id='+linkId+'&type='+linkType).then(function(res){
