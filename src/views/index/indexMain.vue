@@ -16,7 +16,7 @@
                         <li class="messLi" v-for="(infos,index) in surveyInfos" :key="index">
                             <span @click="changeShowF(infos.ocMenubm,'showF')" class="menuSpan" :class="showF==infos.ocMenubm?'active':''">{{infos.name}} <i>{{infos.sl}}</i></span>
                             <ul v-show="showF==infos.ocMenubm" v-if="infos">
-                                <li v-for="(ocMenu,curIndex) in infos.children" :key="curIndex" @click="showAllNode(ocMenu.type)" class="typeLi">{{ocMenu.name}} <i>{{ocMenu.sl}}</i></li>
+                                <li v-for="(ocMenu,curIndex) in infos.children" :key="curIndex" @click="showAllNode(ocMenu.ids)" class="typeLi">{{ocMenu.name}} <i>{{ocMenu.sl}}</i></li>
                                 <!--<li>222</li>-->
                             </ul>
                         </li>
@@ -340,7 +340,6 @@
                     .attr('id',function(d,i){return 'path'+i;})
                     .attr("class", "link")
                     .attr("marker-end",function(d){
-                        console.log(d);
                         /*if((d.size==1&&d.linknum==1)||(d.size==3&&d.linknum==1)){
                             return "url(#resolved)";
                         }else if((d.size==2&&d.linknum==1)||(d.size==3&&d.linknum==2)){
@@ -564,15 +563,22 @@
                 });
             },
             //点击评分列表  右侧图相应类型颜色变化
-            showAllNode(typeStr){
+            showAllNode(ids){
                 var _this=this;
                 this.nodes.attr("class",function(node){
-                    if(typeStr==node.type){
+                    if(ids.indexOf(node.id)!=-1){
                         return 'circleActive';
                     }else{
                         return 'circle';
                     }
                 });
+                /*this.nodes.attr("class",function(node){
+                    if(typeStr==node.type){
+                        return 'circleActive';
+                    }else{
+                        return 'circle';
+                    }
+                });*/
             },
             //颜色设置  根绝类型设置
             fillColor(node){
