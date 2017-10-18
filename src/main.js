@@ -22,8 +22,35 @@ const router = new VueRouter({
 })
 
 
-new Vue({
+var myVue=new Vue({
     el: '#app',
     router:router,
     components: { App }
 })
+
+var reqNum=1,nextNum=1;
+Vue.http.interceptors.push(function(request, next) {
+    reqNum++;
+    myVue.$refs.app.$emit('toggleLoading',true);
+    next(function(response) {
+        nextNum++;
+        if(reqNum==nextNum){
+            myVue.$refs.app.$emit('toggleLoading',false);
+        } 
+        if(response.status=='504'||response.status=='404'){
+            myVue.$refs.app.$emit('showOverTime');
+        }
+        if(response.status==200){
+
+            if(response.body.code==203||response.body.code==undefined){
+                localStorage.clear();
+                window.location.href='login.html';
+            }else if(response.body.code==200){
+
+            }else {
+                myVue.$refs.app.$emit('showOverTime',response.body.msg);
+            }
+        }
+        return response;
+    });
+});
