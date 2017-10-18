@@ -3,8 +3,8 @@
         <div class="topSelect box-shadow clearfix">
             <h3 class="left">关系图谱调查</h3>
             <div class="right messDiv">
-                <label class="left">查询编号：</label>
-                <input type="text" placeholder="请输入编号" class="left txt" v-model="idNo">
+                <label class="left">身份证号：</label>
+                <input type="text" placeholder="请输入身份证号" class="left txt" v-model="idNo">
                 <input type="button" value="查询" class="btnBlue" @click="getData">
             </div>
         </div>
