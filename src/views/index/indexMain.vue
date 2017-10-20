@@ -226,7 +226,7 @@
         },
         watch:{
             onStatus(str){
-                if(this.idNo){
+                if(this.idNo||this.isAppNo){
                     this.getData();
                 }
             }
@@ -259,6 +259,7 @@
             },
             getData(){
                 let pfbz=this.onStatus?0:1;
+                console.log(1);
                 if(this.isAppNo){//地址栏appNo查询
                     var url='/graph/data.gm?appNo='+this.$route.query.appNo+'&pfbz='+pfbz;
                 }else{//身份证号常规查询
