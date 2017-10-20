@@ -439,7 +439,18 @@
                     link.attr('d', function(d) { 
                         /*var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;
                         return path;*/
-                        //如果连接线连接的是同一个实体，则对path属性进行调整，绘制的圆弧属于长圆弧，同时对终点坐标进行微调，避免因坐标一致导致弧无法绘制  
+                        //控制线超界
+                        var raduis=22; 
+                        d.source.x = d.source.x - (2*raduis) < 0  ? (2*raduis) : d.source.x ;
+                        d.source.x = d.source.x + (2*raduis) > w ? w - (2*raduis) : d.source.x ; 
+                        d.source.y = d.source.y - (2*raduis) < 0  ? (2*raduis) : d.source.y ;
+                        d.source.y = d.source.y + (2*raduis) > h ? h - (2*raduis) : d.source.y ;
+
+                        d.target.x = d.target.x - (2*raduis) < 0  ? (2*raduis) : d.target.x ;
+                        d.target.x = d.target.x + (2*raduis) > w ? w - (2*raduis) : d.target.x ; 
+                        d.target.y = d.target.y - (2*raduis) < 0  ? (2*raduis) : d.target.y ;
+                        d.target.y = d.target.y + (2*raduis) > h ? h - (2*raduis) : d.target.y ;
+                        //如果连接线连接的是同一个实体，则对path属性进行调整，绘制的圆弧属于长圆弧，同时对终点坐标进行微调，避免因坐标一致导致弧无法绘制 
                         if(d.target==d.source){  
                             dr = 30/d.linknum;  
                             return"M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 1,1 " + d.target.x + "," + (d.target.y+1);  
@@ -487,8 +498,8 @@
 
                 function dragended(d) {
                     if (!d3.event.active) force.alphaTarget(0);
-                    d.fx = d3.event.x;       //解除dragged中固定的坐标
-                    d.fy = d3.event.y;
+                    d.fx = d.x;       //解除dragged中固定的坐标
+                    d.fy = d.y;
                 }
 
                 function setLinkNumber(group,type){  
