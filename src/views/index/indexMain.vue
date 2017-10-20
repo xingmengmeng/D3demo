@@ -114,11 +114,15 @@
     }
     .mainContain{
         margin:0 5px;
+        overflow-x: hidden;
         .everyDiv{
             padding:10px;
             margin-bottom:10px;
             border:1px #ddd solid;
             box-sizing: border-box;
+            &:last-of-type{
+                margin-bottom:0;
+            }
         }
         .chartTitle{
             padding:0 10px;
@@ -190,7 +194,7 @@
         }
     }
     .attrDetails{
-        max-height: 120px;
+        height: 300px;
         overflow-y: scroll;
     }
 </style>
@@ -231,9 +235,18 @@
                 let winHeight=document.documentElement.clientHeight,
                     aChart=document.querySelector('#chartId');
                 //头部 50  头下方title 52  图的title30  中间间隔30
-                aChart.style.height=winHeight-50-52-30-30+'px';
-                this.chartHeight=winHeight-50-52-30-30;
+                aChart.style.height=winHeight-50-52-30-30-6+'px';
+                this.chartHeight=winHeight-50-52-30-30-6;
                 this.chartWidth=aChart.clientWidth;
+            },
+            setUlHeight(){
+                let winHeight=document.documentElement.clientHeight;
+                let attrDetails=document.querySelectorAll('.attrDetails');
+                console.log(attrDetails)
+                for(let i=0;i<attrDetails.length;i++){
+                    console.log(1)
+                    attrDetails[i].style.height=winHeight-381+'px';
+                }
             },
             getData(){
                 let pfbz=this.onStatus?0:1;
@@ -663,6 +676,12 @@
                 this.$http.get('/graph/findSubjectAtt.gm?id='+nodeId+'&type='+nodeType).then(function(res){
                     if(res.data.code==200){
                         this.attrData=res.data.data.concat();
+                        if(this.attrData&&this.attrData&&this.attrData[0]){
+                            this.showM=this.attrData[0].ocMenubm;
+                        }
+                        this.$nextTick(function(){
+                            this.setUlHeight();
+                        })
                     }
                 })
             },
