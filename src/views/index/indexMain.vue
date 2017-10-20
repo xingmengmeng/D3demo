@@ -235,8 +235,8 @@
                 let winHeight=document.documentElement.clientHeight,
                     aChart=document.querySelector('#chartId');
                 //头部 50  头下方title 52  图的title30  中间间隔30
-                aChart.style.height=winHeight-50-52-30-30-6+'px';
-                this.chartHeight=winHeight-50-52-30-30-6;
+                aChart.style.height=winHeight-50-52-30-30+'px';
+                this.chartHeight=winHeight-50-52-30-35;
                 this.chartWidth=aChart.clientWidth;
             },
             setUlHeight(){
@@ -245,7 +245,7 @@
                 console.log(attrDetails)
                 for(let i=0;i<attrDetails.length;i++){
                     console.log(1)
-                    attrDetails[i].style.height=winHeight-381+'px';
+                    attrDetails[i].style.height=winHeight-375+'px';
                 }
             },
             getData(){
@@ -311,6 +311,7 @@
 
                 const w = this.chartWidth,//后期改为整块区域的宽高，待修改
                       h = this.chartHeight;
+                console.log(w,h);
                 let chartDiv=d3.select('body').select('#chartId');
                 let svg=chartDiv.append("svg")
                     .attr('id','svgId')
