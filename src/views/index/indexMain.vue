@@ -2,7 +2,7 @@
     <section class="container">
         <div class="topSelect box-shadow clearfix">
             <h3 class="left">关系图谱调查</h3>
-            <div class="right messDiv">
+            <div class="right messDiv" v-show="!isAppNo">
                 <label class="left">身份证号：</label>
                 <input type="text" placeholder="请输入身份证号" class="left txt" v-model="idNo">
                 <input type="button" value="查询" class="btnBlue" @click="getData">
@@ -217,11 +217,12 @@
                 curType:'',
                 onStatus:true,//开关状态
                 error:'',
+                isAppNo:false,
             }
         },
         mounted(){
             this.getChartHeight();
-            //this.getData();
+            this.setAppOrNo();   
         },
         watch:{
             onStatus(str){
@@ -248,16 +249,28 @@
                     attrDetails[i].style.height=winHeight-375+'px';
                 }
             },
+            //设置是身份证查询还是直接地址栏app查询
+            setAppOrNo(){
+                let appNo=this.$route.query.appNo;
+                if(appNo){
+                    this.isAppNo=true;
+                    this.getData();
+                }
+            },
             getData(){
                 let pfbz=this.onStatus?0:1;
-                this.$http.get('/graph/data.gm?idNo='+this.idNo+'&pfbz='+pfbz).then(function(res){
+                if(this.isAppNo){//地址栏appNo查询
+                    var url='/graph/data.gm?appNo='+this.$route.query.appNo+'&pfbz='+pfbz;
+                }else{//身份证号常规查询
+                    var url='/graph/data.gm?idNo='+this.idNo+'&pfbz='+pfbz;
+                }
+                this.$http.get(url).then(function(res){
                     if(res.data.code==200){
                         this.graph=res.data.data;
                         this.surveyInfos=res.data.data.surveyInfos.concat();
                         this.drawChart();//画图
                     }
                 })
-                //this.drawChart();//画图
             },
             drawChart(){
                 const _this=this;
@@ -311,7 +324,6 @@
 
                 const w = this.chartWidth,//后期改为整块区域的宽高，待修改
                       h = this.chartHeight;
-                console.log(w,h);
                 let chartDiv=d3.select('body').select('#chartId');
                 let svg=chartDiv.append("svg")
                     .attr('id','svgId')
