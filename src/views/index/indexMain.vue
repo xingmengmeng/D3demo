@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="rightSide">
-                <h5 class="chartTitle box-shadow">关系图 <i @click="onStatus=!onStatus" :class="onStatus?'active':''"></i></h5>
+                <h5 class="chartTitle box-shadow">关系图 <i @click="onStatus=!onStatus" :class="onStatus?'active':''"></i><label class="showAll right">显示全图：</label></h5>
                 <div class="chartWrap box-shadow" id="chartId">
                     <span class="errorSpan">{{error}}</span>
                 </div>
@@ -131,6 +131,9 @@
             line-height: 30px;
             border:1px #ddd solid;
             box-sizing: border-box;
+            .showAll{
+                font-weight: normal;
+            }
             i{
                 float: right;
                 margin-top:4px;
