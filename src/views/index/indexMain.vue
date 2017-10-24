@@ -246,10 +246,8 @@
             setUlHeight(){
                 let winHeight=document.documentElement.clientHeight;
                 let attrDetails=document.querySelectorAll('.attrDetails');
-                console.log(attrDetails)
                 for(let i=0;i<attrDetails.length;i++){
-                    console.log(1)
-                    attrDetails[i].style.height=winHeight-375+'px';
+                    attrDetails[i].style.height=winHeight-435+'px';
                 }
             },
             //设置是身份证查询还是直接地址栏app查询
@@ -709,6 +707,12 @@
                 this.$http.get('/graph/findRelationAtt.gm?id='+linkId+'&type='+linkType).then(function(res){
                     if(res.data.code==200){
                         this.attrData=res.data.data.concat();
+                        if(this.attrData&&this.attrData&&this.attrData[0]){
+                            this.showM=this.attrData[0].ocMenubm;
+                        }
+                        this.$nextTick(function(){
+                            this.setUlHeight();
+                        })
                     }
                 })
             }
