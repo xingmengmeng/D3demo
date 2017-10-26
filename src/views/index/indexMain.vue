@@ -689,9 +689,9 @@
                     nodeType=d.type;
 
                 if(this.isAppNo){//地址栏appNo查询
-                    var url='/graph/findSubjectAtt.gm?id='+nodeId+'&type='+nodeType+'&appNoFlag=1';
+                    var url='/graph/findSubjectAtt.gm?id='+nodeId+'&type='+nodeType+'&appNo='+this.$route.query.appNo;
                 }else{//身份证号常规查询
-                    var url='/graph/findSubjectAtt.gm?id='+nodeId+'&type='+nodeType+'&appNoFlag=0';
+                    var url='/graph/findSubjectAtt.gm?id='+nodeId+'&type='+nodeType;
                 }
                 this.$http.get(url).then(function(res){
                     if(res.data.code==200){
@@ -710,9 +710,9 @@
                 let linkId=d.id,
                     linkType=d.type;
                 if(this.isAppNo){//地址栏appNo查询
-                    var url='/graph/findRelationAtt.gm?id='+linkId+'&type='+linkType+'&appNoFlag=1';
+                    var url='/graph/findRelationAtt.gm?id='+linkId+'&type='+linkType+'&appNo='+this.$route.query.appNo;
                 }else{//身份证号常规查询
-                    var url='/graph/findRelationAtt.gm?id='+linkId+'&type='+linkType+'&appNoFlag=0';
+                    var url='/graph/findRelationAtt.gm?id='+linkId+'&type='+linkType;
                 }
                 this.$http.get(url).then(function(res){
                     if(res.data.code==200){
