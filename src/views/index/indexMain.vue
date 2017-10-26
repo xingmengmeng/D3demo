@@ -260,7 +260,6 @@
             },
             getData(){
                 let pfbz=this.onStatus?0:1;
-                console.log(1);
                 if(this.isAppNo){//地址栏appNo查询
                     var url='/graph/data.gm?appNo='+this.$route.query.appNo+'&pfbz='+pfbz;
                 }else{//身份证号常规查询
@@ -688,7 +687,13 @@
 
                 let nodeId=d.id,
                     nodeType=d.type;
-                this.$http.get('/graph/findSubjectAtt.gm?id='+nodeId+'&type='+nodeType).then(function(res){
+
+                if(this.isAppNo){//地址栏appNo查询
+                    var url='/graph/findSubjectAtt.gm?id='+nodeId+'&type='+nodeType+'&appNoFlag=1';
+                }else{//身份证号常规查询
+                    var url='/graph/findSubjectAtt.gm?id='+nodeId+'&type='+nodeType+'&appNoFlag=0';
+                }
+                this.$http.get(url).then(function(res){
                     if(res.data.code==200){
                         this.attrData=res.data.data.concat();
                         if(this.attrData&&this.attrData&&this.attrData[0]){
@@ -704,7 +709,12 @@
                 this.typeTitle='关系属性';
                 let linkId=d.id,
                     linkType=d.type;
-                this.$http.get('/graph/findRelationAtt.gm?id='+linkId+'&type='+linkType).then(function(res){
+                if(this.isAppNo){//地址栏appNo查询
+                    var url='/graph/findRelationAtt.gm?id='+linkId+'&type='+linkType+'&appNoFlag=1';
+                }else{//身份证号常规查询
+                    var url='/graph/findRelationAtt.gm?id='+linkId+'&type='+linkType+'&appNoFlag=0';
+                }
+                this.$http.get(url).then(function(res){
                     if(res.data.code==200){
                         this.attrData=res.data.data.concat();
                         if(this.attrData&&this.attrData&&this.attrData[0]){
