@@ -2,7 +2,7 @@
     <section class="container">
         <div class="topSelect box-shadow clearfix">
             <h3 class="left">关系图谱调查</h3>
-            <div class="right messDiv" v-show="!isAppNo">
+            <div class="right messDiv" v-show="!isAppNo&&!isIdNo">
                 <label class="left">身份证号：</label>
                 <input type="text" placeholder="请输入身份证号" class="left txt" v-model="idNo">
                 <input type="button" value="查询" class="btnBlue" @click="getData">
@@ -221,6 +221,7 @@
                 onStatus:true,//开关状态
                 error:'',
                 isAppNo:false,
+                isIdNo:false,
             }
         },
         mounted(){
@@ -229,7 +230,7 @@
         },
         watch:{
             onStatus(str){
-                if(this.idNo||this.isAppNo){
+                if(this.idNo||this.isAppNo||this.isIdNo){
                     this.getData();
                 }
             }
@@ -252,9 +253,14 @@
             },
             //设置是身份证查询还是直接地址栏app查询
             setAppOrNo(){
-                let appNo=this.$route.query.appNo;
+                let appNo=this.$route.query.appNo,
+                    idNo=this.$route.query.idNo;
                 if(appNo){
                     this.isAppNo=true;
+                    this.getData();
+                }
+                if(idNo){
+                    this.isIdNo=true;
                     this.getData();
                 }
             },
@@ -262,6 +268,8 @@
                 let pfbz=this.onStatus?0:1;
                 if(this.isAppNo){//地址栏appNo查询
                     var url='/graph/data.gm?appNo='+this.$route.query.appNo+'&pfbz='+pfbz;
+                }else if(this.isIdNo){
+                    var url='/graph/data.gm?idNo='+this.$route.query.idNo+'&pfbz='+pfbz;
                 }else{//身份证号常规查询
                     var url='/graph/data.gm?idNo='+this.idNo+'&pfbz='+pfbz;
                 }
